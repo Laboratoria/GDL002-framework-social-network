@@ -38,21 +38,16 @@ los que trabajes.
 ## 2. Resumen del proyecto
 
 En este proyecto tendrás la oportunidad de _re-escribir_ tu anterior proyecto de
-la _Red Social_, pero esta vez usando un _framework_ o una _librería_.
+la _Red Social_, pero esta vez usando _React_.
 
 Creemos que la mejor manera de enfrentarte a estas herramientas es
 eliminando de la ecuación el hecho de que tengas que entender un proyecto desde
 cero, su alcance, sus particularidades, el flujo, las validaciones, etc.
-Concéntrate en aprender y utilizar estas nuevas tecnologías.
-
-El alcance del proyecto y el detalle de sus características es exactamente
-[el mismo que el original](https://github.com/Laboratoria/curricula-js/tree/v2.x/projects/03-social-network),
-incluyendo la parte de Hacker Edition pero excluyendo la parte de UX.
 
 ## 3. Objetivos de aprendizaje
 
-El objetivo principal de aprendizaje es familiarizarse con el desarrollo web
-usando el _framework_ o _librería_ elegido, y todo lo que ello conlleva:
+El objetivo principal de aprendizaje es reforzar el desarrollo web
+usando _React_, y todo lo que ello conlleva:
 **documentación**, **arquitectura**, **principios de diseño**, **paradigma**,
 **abstracciones**, **vocabulario**, **herramientas**, **comunidad**, ...
 
