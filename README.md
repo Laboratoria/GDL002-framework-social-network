@@ -1,5 +1,4 @@
-# Rehaciendo tu red social usando librerías y frameworks
-
+# Rehaciendo tu red social con React
 ## Índice
 
 * [1. Preámbulo](#1-preámbulo)
