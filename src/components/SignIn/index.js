@@ -11,8 +11,12 @@ const SignInPage = () => (
   <div>
     <h1>Iniciar Sesión</h1>
     <SignInForm />
-    <SignUpLink />
-    <PasswordForgetLink />
+    <p>
+      Quiero <SignUpLink />
+    </p>
+    <p>
+      <PasswordForgetLink />
+    </p>
   </div>
 );
 

@@ -46,28 +46,26 @@ class PasswordForgetFormBase extends Component {
     const isInvalid = email === "";
     return (
       <form onSubmit={this.onSubmit}>
-        {" "}
         <input
           name="email"
           value={this.state.email}
           onChange={this.onChange}
           type="text"
-          placeholder="Email Address"
-        />{" "}
+          placeholder="Email"
+        />
         <button disabled={isInvalid} type="submit">
-          Reset my Password
+          Resetear Contraseña
         </button>
-        {error && <p> {error.message} </p>}{" "}
+        {error && <p> {error.message} </p>}
       </form>
     );
   }
 }
 
 const PasswordForgetLink = () => (
-  <p>
-    {" "}
-    <Link to={ROUTES.PASSWORD_FORGET}> Forgot Password ?</Link>{" "}
-  </p>
+  <React.Fragment>
+    <Link to={ROUTES.PASSWORD_FORGET}> Olvidé mi contraseña</Link>{" "}
+  </React.Fragment>
 );
 export default PasswordForgetPage;
 const PasswordForgetForm = withFirebase(PasswordForgetFormBase);

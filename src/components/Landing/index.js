@@ -1,12 +1,17 @@
 import React from "react";
 import { FirebaseContext } from "../Firebase";
 import Button from "../Button";
+import { SignUpLink } from "../SignUp";
 // const SomeComponent = () => (
 
 // );
 const Landing = () => (
   <div>
     <h1> Landing </h1>
+    <h2>
+      Bienvenido a Socialbook, ¿por qué no <SignUpLink />?
+    </h2>
+
     <Button
       name="A Button"
       action={() => {

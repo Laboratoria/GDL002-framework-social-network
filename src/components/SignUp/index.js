@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
@@ -100,10 +100,9 @@ class SignUpFormBase extends Component {
 }
 
 const SignUpLink = () => (
-  <p>
-    Registrar Nuevo Usuario
-    <Link to={ROUTES.SIGN_UP}> Registro </Link>
-  </p>
+  <React.Fragment>
+    <Link to={ROUTES.SIGN_UP}> Crear una Cuenta </Link>
+  </React.Fragment>
 );
 
 const SignUpForm = compose(
