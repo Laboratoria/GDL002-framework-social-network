@@ -15,11 +15,14 @@ const Navigation = () => (
 
 const NavigationAuth = () => (
   <ul>
-    <li>
+    {/* <li>
       <Link to={ROUTES.LANDING}>¡Bienvenido!</Link>
-    </li>
+    </li> */}
     <li>
       <Link to={ROUTES.HOME}>Home</Link>
+    </li>
+    <li>
+      <Link to={ROUTES.ACCOUNT}>Mi cuenta</Link>
     </li>
     <li>
       <SignOutButton />
@@ -34,6 +37,9 @@ const NavigationNonAuth = () => (
     </li>
     <li>
       <Link to={ROUTES.SIGN_IN}>Iniciar Sesión</Link>
+    </li>
+    <li>
+      <Link to={ROUTES.SIGN_UP}>Crear una cuenta</Link>
     </li>
   </ul>
 );
