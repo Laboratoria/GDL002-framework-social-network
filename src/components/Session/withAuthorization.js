@@ -1,6 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
+
+import AuthUserContext from "./context";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
 
@@ -26,7 +28,15 @@ const withAutohorization = condition => Component => {
     }
 
     render() {
-      return <Component {...this.props} />; // ----> Passed Component that should be protected
+      return (
+        // AuthUserContext shows the Passed Component (page) after the redirection happens
+        <AuthUserContext.Consumer>
+          {authUser =>
+            // ----> Passed Component (page) that should be protected
+            condition(authUser) ? <Component {...this.props} /> : null
+          }
+        </AuthUserContext.Consumer>
+      );
     }
   }
   return compose(
