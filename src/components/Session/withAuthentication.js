@@ -7,20 +7,36 @@ const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { authUser: null };
+      this.state = {
+        authUser: JSON.parse(localStorage.getItem("authUser"))
+      };
     }
-    // Listens for authenticated user with onAuthStateChanged from Firebase
-    // onAuthStateChanged receives a function as parameter that has access to the authenticated user
-    // & the passed function is called every time something changes for the authenticated user
+
     componentDidMount() {
-      this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-        authUser
-          ? this.setState({ authUser })
-          : this.setState({ authUser: null });
-        // If a user signs out, the authUser object becomes null
-        // so the authUser property in the local state is set to null
-      });
+      this.listener = this.props.firebase.onAuthUserListener(
+        authUser => {
+          localStorage.setItem("authUser", JSON.stringify(authUser));
+          this.setState({ authUser });
+        },
+        () => {
+          localStorage.removeItem("authUser");
+          this.setState({ authUser: null });
+        }
+      );
     }
+
+    // // Listens for authenticated user with onAuthStateChanged from Firebase
+    // // onAuthStateChanged receives a function as parameter that has access to the authenticated user
+    // // & the passed function is called every time something changes for the authenticated user
+    // componentDidMount() {
+    //   this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
+    //     authUser
+    //       ? this.setState({ authUser })
+    //       : this.setState({ authUser: null });
+    //     // If a user signs out, the authUser object becomes null
+    //     // so the authUser property in the local state is set to null
+    //   });
+    // }
     // Removes listener if the component unmounts
     componentWillUnmount() {
       this.listener();

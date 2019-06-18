@@ -2,6 +2,7 @@ import React from "react";
 import { PasswordForgetForm } from "../PasswordForget";
 import PasswordChangeForm from "../PasswordChange";
 import { AuthUserContext, withAuthorization } from "../Session";
+import * as ROLES from "../../constants/roles";
 // import { auth } from "firebase";
 
 const AccountPage = () => (

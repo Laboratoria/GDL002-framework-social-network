@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { withFirebase } from "../Firebase";
-// eslint-disable-next-line
-import { AuthUserContext, withAuthorization } from "../Session";
-// eslint-disable-next-line
 import { compose } from "recompose";
+import { AuthUserContext, withAuthorization } from "../Session";
+
+import * as ROLES from "../../constants/roles";
 
 class Admin extends Component {
   constructor(props) {
@@ -26,7 +26,6 @@ class Admin extends Component {
         return user;
       });
       this.setState({ users: user, loading: false });
-      console.log(this.state.users);
     });
   }
 
@@ -35,6 +34,7 @@ class Admin extends Component {
   }
 
   render() {
+    console.log(this.state.users);
     const { users, loading } = this.state;
 
     return (
@@ -70,7 +70,18 @@ const UserList = ({ users }) => (
   </ul>
 );
 
-export default withFirebase(Admin);
+const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN];
+
+export default compose(
+  withFirebase,
+  withAuthorization(condition)
+)(Admin);
+
+// const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN];
+// return compose(
+//   withFirebase,
+//   withAuthorization(condition)
+// )(Admin); //como higher order function en vanilla JS
 
 // class AdminPage extends Component {
 //   constructor(props) {

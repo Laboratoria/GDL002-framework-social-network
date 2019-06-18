@@ -11,16 +11,16 @@ const withAutohorization = condition => Component => {
     //AUTHORIZATION LOGIC WITH FIREBASE LISTENER,
     //TRIGGERS A CALLBACK FUNCTION ("condition()") EVERY TIME THE AUTHENTICATED USER CHANGES
     // condition() is executed with the authUser
+
     componentDidMount() {
-      this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-        if (!condition(authUser)) {
-          // condition() is executed with the authUser
-          this.props.history.push(ROUTES.SIGN_IN);
-          // If authorization fails,
-          //for instance because the authenticated user is null ,
-          //the component redirects to the sign in page.
-        }
-      });
+      this.listener = this.props.firebase.onAuthUserListener(
+        authUser => {
+          if (!condition(authUser)) {
+            this.props.history.push(ROUTES.SIGN_IN);
+          }
+        },
+        () => this.props.history.push(ROUTES.SIGN_IN)
+      );
     }
 
     componentWillUnmount() {
