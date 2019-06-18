@@ -32,9 +32,37 @@ class Admin extends Component {
   }
 
   render() {
-    return <h1>{console.log(this.state.users)}Admin</h1>;
+    const { users, loading } = this.state;
+
+    return (
+      <div>
+        <h1>Admin</h1>
+
+        {loading && <div>Loading ...</div>}
+
+        <UserList users={users} />
+      </div>
+    );
   }
 }
+
+const UserList = ({ users }) => (
+  <ul>
+    {users.map(user => (
+      <li key={user.userID}>
+        <span>
+          <strong>ID:</strong> {user.userID}
+        </span>
+        <span>
+          <strong>E-Mail:</strong> {user.userData.email}
+        </span>
+        <span>
+          <strong>Username:</strong> {user.userData.username}
+        </span>
+      </li>
+    ))}
+  </ul>
+);
 
 export default withFirebase(Admin);
 
