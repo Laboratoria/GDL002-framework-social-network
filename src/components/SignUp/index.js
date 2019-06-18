@@ -33,6 +33,23 @@ class SignUpFormBase extends Component {
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
+        // Create a user in Firestore
+        return this.props.firebase.user(authUser.user.uid).set(
+          {
+            username,
+            email
+            // roles,
+          },
+          { merge: true }
+        );
+      })
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch(error => {
+        console.error("Error writing document: ", error);
+      })
+      .then(authUser => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME); // Pushes the route to the history object
       })
