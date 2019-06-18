@@ -26,6 +26,7 @@ class Admin extends Component {
         return user;
       });
       this.setState({ users: user, loading: false });
+      console.log(this.state.users);
     });
   }
 
@@ -59,7 +60,10 @@ const UserList = ({ users }) => (
           <strong>E-Mail:</strong> {user.userData.email}
         </span>
         <span>
-          <strong>Username:</strong> {user.userData.username}
+          <strong>Nombre de Usuario:</strong> {user.userData.username}
+        </span>
+        <span>
+          {/* <strong>Rol:</strong> {user.userData.roles.map(rol => rol.ADMIN)} */}
         </span>
       </li>
     ))}

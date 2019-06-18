@@ -26,6 +26,7 @@ const AccountPage = () => (
   </AuthUserContext.Consumer>
 );
 
-const condition = authUser => !!authUser;
+const condition = authUser => authUser && !!authUser;
+// const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN];
 
 export default withAuthorization(condition)(AccountPage);

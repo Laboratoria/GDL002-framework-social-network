@@ -42,7 +42,7 @@ const withAutohorization = condition => Component => {
   return compose(
     withRouter,
     withFirebase
-  )(withAuthorization);
+  )(withAuthorization); //como higher order function en vanilla JS
 };
 
 export default withAutohorization;
