@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { withFirebase } from "../Firebase";
+// eslint-disable-next-line
 import { AuthUserContext, withAuthorization } from "../Session";
+// eslint-disable-next-line
 import { compose } from "recompose";
 
 class Admin extends Component {
@@ -28,7 +30,7 @@ class Admin extends Component {
   }
 
   componentWillUnmount() {
-    this.unsusbcribe();
+    this.unsubscribe();
   }
 
   render() {
