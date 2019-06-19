@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withFirebase } from "../Firebase";
 import { compose } from "recompose";
-import { AuthUserContext, withAuthorization } from "../Session";
+import { withAuthorization } from "../Session";
 
 import * as ROLES from "../../constants/roles";
 

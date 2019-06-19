@@ -15,6 +15,7 @@ const withAutohorization = condition => Component => {
     componentDidMount() {
       this.listener = this.props.firebase.onAuthUserListener(
         authUser => {
+          //  If the user is null, it redirects.
           if (!condition(authUser)) {
             this.props.history.push(ROUTES.SIGN_IN);
           }

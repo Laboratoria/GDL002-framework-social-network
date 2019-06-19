@@ -2,7 +2,7 @@ import React from "react";
 import { PasswordForgetForm } from "../PasswordForget";
 import PasswordChangeForm from "../PasswordChange";
 import { AuthUserContext, withAuthorization } from "../Session";
-import * as ROLES from "../../constants/roles";
+// import * as ROLES from "../../constants/roles";
 // import { auth } from "firebase";
 
 const AccountPage = () => (
@@ -10,7 +10,7 @@ const AccountPage = () => (
     {authUser => (
       <div>
         <h1> Mi Cuenta </h1>
-        <h2>Hola: {authUser.email}!</h2>
+        <h2>Hola: {authUser.username}!</h2>
         <p>
           <strong>ID USUARIO:</strong> {authUser.uid}
         </p>
@@ -22,6 +22,7 @@ const AccountPage = () => (
           <h3>Quiero cambiar mi contraseña:</h3>
           <PasswordChangeForm />
         </div>
+        {/* {console.log(authUser)} */}
       </div>
     )}
   </AuthUserContext.Consumer>
