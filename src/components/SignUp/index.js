@@ -5,7 +5,36 @@ import { withFirebase } from "../Firebase";
 // import { FirebaseContext } from '../Firebase';
 import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
+import styled from "styled-components";
 
+const FormSignUp = styled.form`
+  display: flex;
+  max-width: 20rem;
+  padding: 0.5rem;
+  ${props => props.vertical && "flex-direction: column;"} > * {
+    flex: 1;
+
+    &:not(:first-child) {
+      ${props => (props.vertical ? "margin-top" : "margin-left")}: 0.5rem;
+    }
+  }
+
+  input {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #b6b6b6;
+  }
+
+  input::placeholder {
+    color: #ff00cb;
+  }
+
+  button {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: none;
+  }
+`;
 const SignUpPage = () => (
   <div>
     <h1> Registrar Nuevo Usuario </h1>
@@ -90,7 +119,7 @@ class SignUpFormBase extends Component {
       username === "";
 
     return (
-      <form onSubmit={this.onSubmit} className="sign-up-form">
+      <FormSignUp vertical onSubmit={this.onSubmit} className="sign-up-form">
         {/* INPUTS get value from local state & updates it with a onChange handler */}
         <label>Nombre Completo</label>
         <input
@@ -137,7 +166,7 @@ class SignUpFormBase extends Component {
           Sign Up
         </button>
         {error && <p>{error.message}</p>}
-      </form>
+      </FormSignUp>
     );
   }
 }

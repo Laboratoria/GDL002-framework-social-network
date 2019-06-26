@@ -55,7 +55,7 @@ class UserList extends Component {
               <span>
                 <Link
                   to={{
-                    pathname: `${ROUTES.ADMIN}/${user.userID}`,
+                    pathname: `${ROUTES.ADMIN_DETAILS}/${user.userID}`,
                     state: { user }
                   }}
                 >

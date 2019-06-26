@@ -15,6 +15,7 @@ class UserItem extends Component {
 
   componentDidMount() {
     if (this.state.user) {
+      console.log(this.state.user);
       return;
     }
 
