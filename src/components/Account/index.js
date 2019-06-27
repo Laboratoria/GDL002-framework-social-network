@@ -1,7 +1,12 @@
 import React from "react";
+import { compose } from "recompose";
 import { PasswordForgetForm } from "../PasswordForget";
 import PasswordChangeForm from "../PasswordChange";
-import { AuthUserContext, withAuthorization } from "../Session";
+import {
+  AuthUserContext,
+  withAuthorization,
+  withEmailVerification
+} from "../Session";
 // import * as ROLES from "../../constants/roles";
 // import { auth } from "firebase";
 
@@ -31,4 +36,7 @@ const AccountPage = () => (
 const condition = authUser => authUser && !!authUser;
 // const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN];
 
-export default withAuthorization(condition)(AccountPage);
+export default compose(
+  withEmailVerification,
+  withAuthorization(condition)
+)(AccountPage);

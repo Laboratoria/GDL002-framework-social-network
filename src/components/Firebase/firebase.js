@@ -33,6 +33,11 @@ class Firebase {
 
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
 
+  doSendEmailVerification = () =>
+    this.auth.currentUser.sendEmailVerification({
+      url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT
+    });
+
   //  If the user is not null, we will get the database user with the help of the authenticated user’s unique identifier,
   //  and then we merge everything from the database user with the unique identifier and email from the authenticated user.
 

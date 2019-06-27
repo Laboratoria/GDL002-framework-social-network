@@ -84,6 +84,9 @@ class SignUpFormBase extends Component {
       .catch(error => {
         console.error("Error writing document: ", error);
       })
+      .then(() => {
+        return this.props.firebase.doSendEmailVerification();
+      })
       .then(authUser => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME); // Pushes the route to the history object
