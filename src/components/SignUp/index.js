@@ -68,7 +68,7 @@ class SignUpFormBase extends Component {
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        // Create a user in Firestore
+        // Create a user in Firestore MERGE Users
         return this.props.firebase.user(authUser.user.uid).set(
           {
             username,
