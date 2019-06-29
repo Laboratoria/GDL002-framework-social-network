@@ -31,6 +31,9 @@ const NavigationAuth = ({ authUser }) => (
       </li>
     )}
     <li>
+      <Link to={ROUTES.POST}>Publicar</Link>
+    </li>
+    <li>
       <SignOutButton />
     </li>
   </ul>

@@ -7,8 +7,6 @@ import {
   withAuthorization,
   withEmailVerification
 } from "../Session";
-// import * as ROLES from "../../constants/roles";
-// import { auth } from "firebase";
 
 const AccountPage = () => (
   <AuthUserContext.Consumer>

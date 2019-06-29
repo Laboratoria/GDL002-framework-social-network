@@ -16,6 +16,7 @@ import { withAuthentication } from "../Session";
 // import { AuthUserContext } from '../Session';
 
 import styled from "styled-components";
+import CreatePost from "../Posts";
 // import { UserItem } from "../Users";
 
 const H1 = styled.h1`
@@ -45,6 +46,7 @@ const App = () => {
           <Route exact path={ROUTES.HOME} component={HomePage} />
           <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
           <Route exact path={ROUTES.ADMIN} component={AdminPage} />
+          <Route exact path={ROUTES.POST} component={CreatePost} />
           {/* <Route exact path={ROUTES.ADMIN_DETAILS} component={UserItem} /> */}
         </div>
       </Router>

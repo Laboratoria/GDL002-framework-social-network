@@ -19,7 +19,6 @@ class CreatePostBase extends Component {
       username: ""
     };
     this.handleImageChange = this.handleImageChange.bind(this);
-    // this.handleImageSubmit = this.handleImageSubmit.bind(this);
     this.createPost = this.createPost.bind(this);
   }
   getMoment() {
@@ -68,7 +67,9 @@ class CreatePostBase extends Component {
   }
 
   createPost(author) {
-    this.setState({ username: author });
+    this.setState({
+      username: author
+    });
     console.log(this.state);
   }
 
@@ -81,13 +82,9 @@ class CreatePostBase extends Component {
   }
   render() {
     const isInvalid = this.state.error != null;
-    let author = this.props.firebase.activeUser.username;
+
     return (
-      // <AuthUserContext.Consumer>
-      // {authUser => (
       <div>
-        {(author = this.props.firebase.activeUser.username)}
-        {/* {console.log(authUser.username)} */}
         <h2>Hola{this.props.firebase.activeUser.username}</h2>
         <h3>Comparte tu último descubrimiento:</h3>
         <input type="text" onChange={this.onChangeText} />
@@ -116,14 +113,12 @@ class CreatePostBase extends Component {
           disabled={isInvalid}
           type="submit"
           onClick={() => {
-            this.createPost(author);
+            this.createPost(this.props.firebase.activeUser.username);
           }}
         >
           Publicar
         </button>
       </div>
-      // )}
-      /* </AuthUserContext.Consumer> */
     );
   }
 }
