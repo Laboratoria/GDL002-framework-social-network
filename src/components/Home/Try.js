@@ -53,7 +53,7 @@ class MessageList extends Component {
                 <strong>texto:</strong> {message.messageData.text}
               </span>
               <span>
-                <strong>fecha:</strong>{" "}
+                <strong>fecha:</strong>
                 {message.messageData.createdAt.toDate().toString()}
               </span>
               <span />

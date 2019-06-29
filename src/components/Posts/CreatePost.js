@@ -11,25 +11,25 @@ class CreatePostBase extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      text: "",
+      createdAt: this.getMoment(),
       images: { file: "", imagePreviewUrl: "" },
       isPublic: false,
       error: null,
-      moment: this.getDate()
+      text: "",
+      username: ""
     };
     this.handleImageChange = this.handleImageChange.bind(this);
-    this.handleImageSubmit = this.handleImageSubmit.bind(this);
+    // this.handleImageSubmit = this.handleImageSubmit.bind(this);
     this.createPost = this.createPost.bind(this);
   }
-  getDate() {
+  getMoment() {
     let moment = { date: null, time: null };
     let d = new Date();
     let today = `${String(d.getDate()).padStart(2, "0")}/${String(
       d.getMonth() + 1
     ).padStart(2, "0")}/${d.getFullYear()}`;
-    let time = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
-    moment = { date: today, time: time };
+    let now = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+    moment = { date: today, time: now };
     return moment;
   }
   onChangeText = event => {
@@ -40,12 +40,6 @@ class CreatePostBase extends Component {
     this.setState({ isPublic: event.target.checked });
     console.log("Public: " + this.state.isPublic);
   };
-  // createPost(event, authUser) {}
-
-  handleImageSubmit(e) {
-    e.preventDefault();
-    // TODO: do something with -> this.state.file
-  }
 
   handleImageChange(e) {
     e.preventDefault();
@@ -80,10 +74,15 @@ class CreatePostBase extends Component {
 
   componentDidMount() {}
   render() {
+    const isInvalid = this.state.error != null;
+    let author = "";
+
     return (
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
+            {(author = authUser.username)}
+            {console.log(authUser.username)}
             <h2>Hola, {authUser.username}</h2>
             <h3>Comparte tu último descubrimiento:</h3>
             <input type="text" onChange={this.onChangeText} />
@@ -104,17 +103,15 @@ class CreatePostBase extends Component {
                   accept="image/*"
                   onChange={this.handleImageChange}
                 />
-                <button type="submit" onClick={this.handleImageSubmit}>
-                  Subir Imagen
-                </button>
               </form>
             </div>
             <ImagePreview src={this.state.images.imagePreviewUrl} />
             <div>{this.state.error}</div>
             <button
+              disabled={isInvalid}
               type="submit"
               onClick={() => {
-                this.createPost(authUser.username);
+                this.createPost(author);
               }}
             >
               Publicar
