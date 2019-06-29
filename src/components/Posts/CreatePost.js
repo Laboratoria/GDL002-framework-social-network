@@ -67,58 +67,63 @@ class CreatePostBase extends Component {
     }
   }
 
-  createPost(name) {
-    this.setState({ username: name });
+  createPost(author) {
+    this.setState({ username: author });
     console.log(this.state);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    console.log(this.props.firebase.activeUser.username);
+    this.setState({ username: this.props.firebase.activeUser.username });
+  }
+  componentDidUpdate() {
+    console.log(this.state.username);
+  }
   render() {
     const isInvalid = this.state.error != null;
-    let author = "";
-
+    let author = this.props.firebase.activeUser.username;
     return (
-      <AuthUserContext.Consumer>
-        {authUser => (
-          <div>
-            {(author = authUser.username)}
-            {console.log(authUser.username)}
-            <h2>Hola, {authUser.username}</h2>
-            <h3>Comparte tu último descubrimiento:</h3>
-            <input type="text" onChange={this.onChangeText} />
-            <label>
-              Post privado (visible sólo en mi club):
-              <input
-                name="isPublic"
-                type="checkbox"
-                checked={this.state.isPublic}
-                value={false}
-                onChange={this.onChangeCheckbox}
-              />
-            </label>
-            <div>
-              <form onSubmit={this.handleImageSubmit}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={this.handleImageChange}
-                />
-              </form>
-            </div>
-            <ImagePreview src={this.state.images.imagePreviewUrl} />
-            <div>{this.state.error}</div>
-            <button
-              disabled={isInvalid}
-              type="submit"
-              onClick={() => {
-                this.createPost(author);
-              }}
-            >
-              Publicar
-            </button>
-          </div>
-        )}
-      </AuthUserContext.Consumer>
+      // <AuthUserContext.Consumer>
+      // {authUser => (
+      <div>
+        {(author = this.props.firebase.activeUser.username)}
+        {/* {console.log(authUser.username)} */}
+        <h2>Hola{this.props.firebase.activeUser.username}</h2>
+        <h3>Comparte tu último descubrimiento:</h3>
+        <input type="text" onChange={this.onChangeText} />
+        <label>
+          Post privado (visible sólo en mi club):
+          <input
+            name="isPublic"
+            type="checkbox"
+            checked={this.state.isPublic}
+            value={false}
+            onChange={this.onChangeCheckbox}
+          />
+        </label>
+        <div>
+          <form onSubmit={this.handleImageSubmit}>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={this.handleImageChange}
+            />
+          </form>
+        </div>
+        <ImagePreview src={this.state.images.imagePreviewUrl} />
+        <div>{this.state.error}</div>
+        <button
+          disabled={isInvalid}
+          type="submit"
+          onClick={() => {
+            this.createPost(author);
+          }}
+        >
+          Publicar
+        </button>
+      </div>
+      // )}
+      /* </AuthUserContext.Consumer> */
     );
   }
 }

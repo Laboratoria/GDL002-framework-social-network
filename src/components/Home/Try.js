@@ -43,7 +43,6 @@ class MessageList extends Component {
         <h2>messages</h2>
         {loading && <div>Loading ...</div>}
         <div>
-          {console.log(this.state.messages)}
           {messages.map(message => (
             <div key={message.messageID}>
               <span>

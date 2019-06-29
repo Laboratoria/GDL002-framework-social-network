@@ -38,6 +38,7 @@ class Firebase {
       url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT
     });
 
+  activeUser = {};
   //  If the user is not null, we will get the database user with the help of the authenticated user’s unique identifier,
   //  and then we merge everything from the database user with the unique identifier and email from the authenticated user.
 
@@ -65,6 +66,7 @@ class Firebase {
               providerData: authUser.providerData,
               ...dbUser
             };
+            this.activeUser = authUser;
 
             next(authUser);
           });
