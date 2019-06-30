@@ -12,7 +12,7 @@ class CreatePostBase extends Component {
     super(props);
     this.state = {
       createdAt: this.getMoment(),
-      images: { file: "", imagePreviewUrl: "" },
+      images: {},
       isPublic: false,
       error: null,
       text: "",
@@ -23,16 +23,19 @@ class CreatePostBase extends Component {
   }
   getMoment() {
     let moment = { date: null, time: null };
-    let d = new Date();
-    let today = `${String(d.getDate()).padStart(2, "0")}/${String(
-      d.getMonth() + 1
-    ).padStart(2, "0")}/${d.getFullYear()}`;
-    let now = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+    const date = new Date();
+    const today = `${String(date.getDate()).padStart(2, "0")}/${String(
+      date.getMonth() + 1
+    ).padStart(2, "0")}/${date.getFullYear()}`;
+    const now = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     moment = { date: today, time: now };
     return moment;
   }
   onChangeText = event => {
-    this.setState({ text: event.target.value });
+    this.setState({
+      text: event.target.value,
+      username: this.props.firebase.activeUser.username
+    });
     console.log(this.state.text);
   };
   onChangeCheckbox = event => {
@@ -42,20 +45,20 @@ class CreatePostBase extends Component {
 
   handleImageChange(e) {
     e.preventDefault();
-    let fileTypes = ["jpg", "jpeg", "png", "gif"];
-    let reader = new FileReader();
+    const fileTypes = ["jpg", "jpeg", "png", "gif"];
+    const reader = new FileReader();
     let file = e.target.files[0];
     if (file) {
       let extension = file.name
         .split(".")
         .pop()
         .toLowerCase();
-      let isImage = fileTypes.indexOf(extension) > -1;
+      const isImage = fileTypes.indexOf(extension) > -1; //&& file.size < 5000
       if (isImage) {
         reader.onloadend = () => {
           this.setState({
             error: null,
-            images: { file: file, imagePreviewUrl: reader.result }
+            images: { imgName: file.name, imagePreviewUrl: reader.result }
           });
         };
 
@@ -66,26 +69,35 @@ class CreatePostBase extends Component {
     }
   }
 
-  createPost(author) {
-    this.setState({
-      username: author
-    });
+  createPost(authorID) {
     console.log(this.state);
+    this.props.firebase
+      .post(authorID)
+      .set(this.state)
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch(error => {
+        console.error("Error writing document: ", error);
+      });
   }
 
   componentDidMount() {
-    console.log(this.props.firebase.activeUser.username);
-    this.setState({ username: this.props.firebase.activeUser.username });
+    // console.log(this.props.firebase.activeUser.username);
+    // this.setState({ username: this.props.firebase.activeUser.username });
   }
   componentDidUpdate() {
     console.log(this.state.username);
   }
   render() {
-    const isInvalid = this.state.error != null;
+    const isInvalid = this.state.error != null || this.state.text == "";
 
     return (
       <div>
-        <h2>Hola{this.props.firebase.activeUser.username}</h2>
+        <h2>
+          Hola
+          <label> {this.props.firebase.activeUser.username}</label>
+        </h2>
         <h3>Comparte tu último descubrimiento:</h3>
         <input type="text" onChange={this.onChangeText} />
         <label>
@@ -113,7 +125,7 @@ class CreatePostBase extends Component {
           disabled={isInvalid}
           type="submit"
           onClick={() => {
-            this.createPost(this.props.firebase.activeUser.username);
+            this.createPost(this.props.firebase.activeUser.uid);
           }}
         >
           Publicar
