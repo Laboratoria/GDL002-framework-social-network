@@ -3,32 +3,62 @@ import React, { Component } from "react";
 
 import { withFirebase } from "../Firebase";
 // import * as ROUTES from "../../constants/routes";
+import styled from "styled-components";
 
-class MessageList extends Component {
+const ImageFromPost = styled.img`
+  width: 15rem;
+`;
+
+class postList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       loading: false,
-      messages: []
+      posts: [],
+      posts2: [],
+      limit: 3
     };
   }
+  // onListenForMessages = () => {
+  //   this.setState({ loading: true });
 
+  //   this.props.firebase
+  //     .posts()
+  //     .orderByChild("createdAt")
+  //     .limitToLast(this.state.limit)
+  //     .on("value", snapshot => {
+  //       const messageObject = snapshot.val();
+
+  //       if (messageObject) {
+  //         const messageList = Object.keys(messageObject).map(key => ({
+  //           ...messageObject[key],
+  //           uid: key
+  //         }));
+
+  //         this.setState({
+  //           posts2: messageList,
+  //           loading: false
+  //         });
+  //       } else {
+  //         this.setState({ posts2: null, loading: false });
+  //       }
+  //     });
+  // };
   componentDidMount() {
+    // this.onListenForMessages();
     this.setState({ loading: true });
 
-    this.unsubscribe = this.props.firebase
-      .messages()
-      .onSnapshot(querySnapshot => {
-        var message = [];
+    this.unsubscribe = this.props.firebase.posts().onSnapshot(querySnapshot => {
+      var post = [];
 
-        querySnapshot.docs.map(e => {
-          const messagesincome = { messageID: e.id, messageData: e.data() };
-          message.push(messagesincome);
-          return message;
-        });
-        this.setState({ messages: message, loading: false });
+      querySnapshot.docs.map(e => {
+        const postsincome = { postID: e.id, postData: e.data() };
+        post.push(postsincome);
+        return post;
       });
+      this.setState({ posts: post, loading: false });
+    });
   }
 
   componentWillUnmount() {
@@ -36,26 +66,32 @@ class MessageList extends Component {
   }
 
   render() {
-    const { messages, loading } = this.state;
+    const { posts, loading } = this.state;
 
     return (
       <div>
-        <h2>messages</h2>
+        <h2>Posts Recientes</h2>
         {loading && <div>Loading ...</div>}
         <div>
-          {messages.map(message => (
-            <div key={message.messageID}>
-              <span>
-                <strong>ID:</strong> {message.messageID}
-              </span>
-              <span>
-                <strong>texto:</strong> {message.messageData.text}
-              </span>
-              <span>
-                <strong>fecha:</strong>
-                {message.messageData.createdAt.toDate().toString()}
-              </span>
-              <span />
+          {posts.map(post => (
+            <div key={post.postID}>
+              <p>
+                <strong>ID del post:</strong> {post.postID}
+              </p>
+              <p>
+                <strong>ID del autor:</strong> {post.postData.authorID}
+              </p>
+              <p>
+                <strong>{post.postData.username}</strong> publicó el
+                <i> {post.postData.createdAt.date}</i> a las
+                <i> {post.postData.createdAt.time}</i> hrs:
+              </p>
+              <p>
+                <i>{post.postData.text}</i>
+              </p>
+              <ImageFromPost src={post.postData.images.imageUrl} />
+              <p />
+              <hr />
             </div>
           ))}
         </div>
@@ -64,4 +100,4 @@ class MessageList extends Component {
   }
 }
 
-export default withFirebase(MessageList);
+export default withFirebase(postList);

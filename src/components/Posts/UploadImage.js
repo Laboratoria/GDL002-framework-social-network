@@ -17,7 +17,7 @@ const UploadImage = props => {
           onChange={props.handleImageChange}
         />
       </form>
-      <ImagePreview src={props.imagePreviewUrl} />
+      <ImagePreview src={props.imageUrl} />
       <div>
         <ErrorParagraph>{props.error}</ErrorParagraph>
       </div>

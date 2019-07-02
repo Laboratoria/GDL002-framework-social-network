@@ -9,6 +9,7 @@ class CreatePostBase extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      authorID: "",
       createdAt: getMoment(),
       images: {},
       isPublic: false,
@@ -23,7 +24,8 @@ class CreatePostBase extends Component {
   onChangeText = event => {
     this.setState({
       text: event.target.value,
-      username: this.props.firebase.activeUser.username
+      username: this.props.firebase.activeUser.username,
+      authorID: this.props.firebase.activeUser.uid
     });
     console.log(this.state.text);
   };
@@ -44,29 +46,36 @@ class CreatePostBase extends Component {
         .toLowerCase();
       const isImage = fileTypes.indexOf(extension) > -1; //&& file.size < 5000
 
-      const size = file.size < 5000000;
+      const size = file.size < 1048487;
       if (!isImage) {
-        this.setState({ error: "No es un archivo de imagen" });
+        this.setState({
+          error: "No es un archivo de imagen",
+          images: { imageUrl: "" }
+        });
       } else if (!size) {
-        this.setState({ error: "Archivo demasiado grande" });
+        this.setState({
+          error: "Archivo demasiado grande",
+          images: { imageUrl: "" }
+        });
       } else {
         this.setState({ error: null });
         console.log(file);
         reader.onloadend = () => {
           this.setState({
             error: null,
-            images: { imageName: file.name, imagePreviewUrl: reader.result }
+            images: { imageName: file.name, imageUrl: reader.result }
           });
         };
+        reader.readAsDataURL(file);
       }
     }
   }
 
-  createPost(authorID) {
+  createPost() {
     console.log(this.state);
     this.props.firebase
-      .post(authorID)
-      .set(this.state)
+      .posts()
+      .add(this.state)
       .then(() => {
         console.log("Document successfully written!");
       })
@@ -105,7 +114,7 @@ class CreatePostBase extends Component {
         </label>
         <UploadImage
           handleImageChange={this.handleImageChange}
-          imagePreviewUrl={this.state.images.imagePreviewUrl}
+          imageUrl={this.state.images.imageUrl}
           error={this.state.error}
         />
 
@@ -113,7 +122,7 @@ class CreatePostBase extends Component {
           disabled={isInvalid}
           type="submit"
           onClick={() => {
-            this.createPost(this.props.firebase.activeUser.uid);
+            this.createPost();
           }}
         >
           Publicar
