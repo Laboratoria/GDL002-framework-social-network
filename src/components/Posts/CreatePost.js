@@ -1,17 +1,15 @@
 import React, { Component } from "react";
+import UploadImage from "./UploadImage";
 import { withFirebase } from "../Firebase";
-import { AuthUserContext } from "../Session";
-import styled from "styled-components";
-
-const ImagePreview = styled.img`
-  max-width: 30%;
-`;
+import { getMoment } from "../Utils";
+// import { AuthUserContext } from "../Session";
+// import styled from "styled-components";
 
 class CreatePostBase extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      createdAt: this.getMoment(),
+      createdAt: getMoment(),
       images: {},
       isPublic: false,
       error: null,
@@ -21,16 +19,7 @@ class CreatePostBase extends Component {
     this.handleImageChange = this.handleImageChange.bind(this);
     this.createPost = this.createPost.bind(this);
   }
-  getMoment() {
-    let moment = { date: null, time: null };
-    const date = new Date();
-    const today = `${String(date.getDate()).padStart(2, "0")}/${String(
-      date.getMonth() + 1
-    ).padStart(2, "0")}/${date.getFullYear()}`;
-    const now = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-    moment = { date: today, time: now };
-    return moment;
-  }
+
   onChangeText = event => {
     this.setState({
       text: event.target.value,
@@ -54,17 +43,20 @@ class CreatePostBase extends Component {
         .pop()
         .toLowerCase();
       const isImage = fileTypes.indexOf(extension) > -1; //&& file.size < 5000
-      if (isImage) {
+
+      const size = file.size < 5000000;
+      if (!isImage) {
+        this.setState({ error: "No es un archivo de imagen" });
+      } else if (!size) {
+        this.setState({ error: "Archivo demasiado grande" });
+      } else {
+        this.setState({ error: null });
+        console.log(file);
         reader.onloadend = () => {
           this.setState({
-            error: null,
             images: { imgName: file.name, imagePreviewUrl: reader.result }
           });
         };
-
-        reader.readAsDataURL(file);
-      } else {
-        this.setState({ error: "No es un archivo de imagen" });
       }
     }
   }
@@ -90,7 +82,7 @@ class CreatePostBase extends Component {
     console.log(this.state.username);
   }
   render() {
-    const isInvalid = this.state.error != null || this.state.text == "";
+    const isInvalid = this.state.error != null || this.state.text === "";
 
     return (
       <div>
@@ -110,17 +102,12 @@ class CreatePostBase extends Component {
             onChange={this.onChangeCheckbox}
           />
         </label>
-        <div>
-          <form onSubmit={this.handleImageSubmit}>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={this.handleImageChange}
-            />
-          </form>
-        </div>
-        <ImagePreview src={this.state.images.imagePreviewUrl} />
-        <div>{this.state.error}</div>
+        <UploadImage
+          handleImageChange={this.handleImageChange}
+          imagePreviewUrl={this.state.images.imagePreviewUrl}
+          error={this.state.error}
+        />
+
         <button
           disabled={isInvalid}
           type="submit"

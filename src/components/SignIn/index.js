@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { compose } from "recompose";
+import styled from "styled-components";
 
 import { SignUpLink } from "../SignUp";
 import { PasswordForgetLink } from "../PasswordForget";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
+
+const ErrorParagraph = styled.p`
+  color: #ff0000;
+`;
 
 const SignInPage = () => (
   <div>
@@ -53,6 +58,30 @@ class SignInFormBase extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  codeMessageMapper(errorCode) {
+    let message = "";
+    switch (errorCode) {
+      case "auth/invalid-email":
+        message = "Correo Electrónico inválido";
+        break;
+      case "auth/user-not-found":
+        message = "Correo Electrónico no registrado";
+        break;
+      case "auth/wrong-password":
+        message = "Contraseña incorrecta";
+        break;
+      case "auth/email-already-in-use":
+        message = "Este Correo Electrónico ya está en uso";
+        break;
+      case "auth/weak-password":
+        message = "La contraseña debe tener al menos 6 caracteres";
+        break;
+      default:
+    }
+
+    return message;
+  }
+
   render() {
     const { email, password, error } = this.state;
 
@@ -80,7 +109,9 @@ class SignInFormBase extends Component {
           Iniciar Sesión
         </button>
 
-        {error && <p>{error.message}</p>}
+        {error && (
+          <ErrorParagraph>{this.codeMessageMapper(error.code)}</ErrorParagraph>
+        )}
       </form>
     );
   }
