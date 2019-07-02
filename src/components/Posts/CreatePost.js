@@ -44,25 +44,20 @@ class CreatePostBase extends Component {
         .toLowerCase();
       const isImage = fileTypes.indexOf(extension) > -1; //&& file.size < 5000
 
-      const size = file.size < 500000;
+      const size = file.size < 5000000;
       if (!isImage) {
-        this.setState({
-          error: "No es un archivo de imagen",
-          images: { imagePreviewUrl: "" }
-        });
+        this.setState({ error: "No es un archivo de imagen" });
       } else if (!size) {
-        this.setState({
-          error: "Archivo demasiado grande",
-          images: { imagePreviewUrl: "" }
-        });
+        this.setState({ error: "Archivo demasiado grande" });
       } else {
+        this.setState({ error: null });
+        console.log(file);
         reader.onloadend = () => {
           this.setState({
             error: null,
             images: { imageName: file.name, imagePreviewUrl: reader.result }
           });
         };
-        reader.readAsDataURL(file);
       }
     }
   }
