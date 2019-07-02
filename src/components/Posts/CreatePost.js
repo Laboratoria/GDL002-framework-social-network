@@ -59,7 +59,7 @@ class CreatePostBase extends Component {
         reader.onloadend = () => {
           this.setState({
             error: null,
-            images: { file: file, imagePreviewUrl: reader.result }
+            images: { imageName: file.name, imagePreviewUrl: reader.result }
           });
         };
         reader.readAsDataURL(file);
