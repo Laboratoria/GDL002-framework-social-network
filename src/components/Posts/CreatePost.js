@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import UploadImage from "./UploadImage";
 import { withFirebase } from "../Firebase";
-import { getMoment } from "../Utils";
+// import { getMoment } from "../Utils";
 // import { AuthUserContext } from "../Session";
 // import styled from "styled-components";
 
@@ -10,7 +10,8 @@ class CreatePostBase extends Component {
     super(props);
     this.state = {
       authorID: "",
-      createdAt: getMoment(),
+      createdAt: this.props.firebase.fieldValue.serverTimestamp(),
+      // createdAt: getMoment(),
       images: {},
       isPublic: false,
       error: null,

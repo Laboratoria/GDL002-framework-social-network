@@ -5,13 +5,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 1rem;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
+/* 
 .fileInput {
   border-bottom: 4px solid lightgray;
   border-right: 4px solid lightgray;
@@ -53,7 +54,7 @@ img {
 }
 .submitButton:hover {
   background: #efefef;
-}
+} */
 
 .centerText {
   text-align: center;

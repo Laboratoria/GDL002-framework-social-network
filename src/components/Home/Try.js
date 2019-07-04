@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import { withFirebase } from "../Firebase";
 // import * as ROUTES from "../../constants/routes";
 import styled from "styled-components";
+import Loader from "react-loader-spinner";
 
 const ImageFromPost = styled.img`
   width: 15rem;
@@ -49,16 +50,19 @@ class postList extends Component {
     // this.onListenForMessages();
     this.setState({ loading: true });
 
-    this.unsubscribe = this.props.firebase.posts().onSnapshot(querySnapshot => {
-      var post = [];
+    this.unsubscribe = this.props.firebase
+      .posts()
+      .orderBy("createdAt", "desc")
+      .onSnapshot(querySnapshot => {
+        var post = [];
 
-      querySnapshot.docs.map(e => {
-        const postsincome = { postID: e.id, postData: e.data() };
-        post.push(postsincome);
-        return post;
+        querySnapshot.docs.map(e => {
+          const postsincome = { postID: e.id, postData: e.data() };
+          post.push(postsincome);
+          return post;
+        });
+        this.setState({ posts: post, loading: false });
       });
-      this.setState({ posts: post, loading: false });
-    });
   }
 
   componentWillUnmount() {
@@ -71,7 +75,12 @@ class postList extends Component {
     return (
       <div>
         <h2>Posts Recientes</h2>
-        {loading && <div>Loading ...</div>}
+        {loading && (
+          <div>
+            Cargando ...
+            <Loader type="ThreeDots" color="#75b6ff" height="100" width="100" />
+          </div>
+        )}
         <div>
           {posts.map(post => (
             <div key={post.postID}>
@@ -83,8 +92,8 @@ class postList extends Component {
               </p>
               <p>
                 <strong>{post.postData.username}</strong> publicó el
-                <i> {post.postData.createdAt.date}</i> a las
-                <i> {post.postData.createdAt.time}</i> hrs:
+                {/* <i> {post.postData.firebaseDate.toDate().toString()}</i> a las */}
+                {/* <i> {post.postData.createdAt.time}</i> hrs: */}
               </p>
               <p>
                 <i>{post.postData.text}</i>
