@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
-
 import { withFirebase } from "../Firebase";
 import { AuthUserContext } from "../Session";
-// import * as ROUTES from "../../constants/routes";
 import styled from "styled-components";
 import Loader from "react-loader-spinner";
 
@@ -11,7 +8,7 @@ const ImageFromPost = styled.img`
   max-width: 15rem;
 `;
 
-class postList extends Component {
+class APostList extends Component {
   constructor(props) {
     super(props);
 
@@ -45,7 +42,8 @@ class postList extends Component {
 
   componentDidMount() {
     this.onListenForMessages();
-    this.setState({ loading: true });
+
+    // this.setState({ loading: true });
   }
 
   componentWillUnmount() {
@@ -113,4 +111,4 @@ class postList extends Component {
   }
 }
 
-export default withFirebase(postList);
+export default withFirebase(APostList);

@@ -1,8 +1,10 @@
 import React from "react";
-import MessageList from "./Try";
-import CreatePost from "../Posts";
+// import APostList from "./Try";
+import { CreatePost, APostList } from "../Posts";
+// import APostList from "../Posts/PostsList";
 import { compose } from "recompose";
 import { withAuthorization, withEmailVerification } from "../Session";
+// import CreatePost from "../Posts/CreatePost";
 
 const HomePage = () => (
   <div>
@@ -10,7 +12,7 @@ const HomePage = () => (
     <p>La página Home está visible para todos los usuarios logueados</p>
     <p>Currently using React {React.version}</p>
     <CreatePost />
-    <MessageList />
+    <APostList />
   </div>
 );
 

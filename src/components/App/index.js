@@ -16,7 +16,7 @@ import { withAuthentication } from "../Session";
 // import { AuthUserContext } from '../Session';
 
 import styled from "styled-components";
-import CreatePost from "../Posts";
+import { CreatePost } from "../Posts";
 // import { UserItem } from "../Users";
 
 const H1 = styled.h1`

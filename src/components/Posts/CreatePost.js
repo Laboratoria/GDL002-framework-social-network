@@ -78,19 +78,17 @@ class CreatePostBase extends Component {
       .posts()
       .add(this.state)
       .then(() => {
-        if (this.mounted) {
-          this.setState({
-            authorID: "",
-            createdAt: this.props.firebase.fieldValue.serverTimestamp(),
-            images: {},
-            isPublic: false,
-            error: null,
-            text: "",
-            username: ""
-          });
-          console.log("Document successfully written!");
-          console.log(this.state);
-        }
+        this.setState({
+          authorID: "",
+          createdAt: this.props.firebase.fieldValue.serverTimestamp(),
+          images: {},
+          isPublic: false,
+          error: null,
+          text: "",
+          username: ""
+        });
+        console.log("Document successfully written!");
+        console.log(this.state);
       })
       .catch(error => {
         console.error("Error writing document: ", error);
@@ -100,10 +98,7 @@ class CreatePostBase extends Component {
   componentDidUpdate() {
     console.log(this.state.username);
   }
-  componentDidMount() {
-    document.body.classList.remove("home-container");
-    this.mounted = true;
-  }
+
   componentWillMount() {
     this.mounted = false;
   }
