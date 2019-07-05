@@ -4,6 +4,7 @@ import { withFirebase } from "../Firebase";
 // import { getMoment } from "../Utils";
 // import { AuthUserContext } from "../Session";
 // import styled from "styled-components";
+//
 
 class CreatePostBase extends Component {
   constructor(props) {
@@ -11,7 +12,6 @@ class CreatePostBase extends Component {
     this.state = {
       authorID: "",
       createdAt: this.props.firebase.fieldValue.serverTimestamp(),
-      // createdAt: getMoment(),
       images: {},
       isPublic: false,
       error: null,
@@ -78,19 +78,34 @@ class CreatePostBase extends Component {
       .posts()
       .add(this.state)
       .then(() => {
-        console.log("Document successfully written!");
+        if (this.mounted) {
+          this.setState({
+            authorID: "",
+            createdAt: this.props.firebase.fieldValue.serverTimestamp(),
+            images: {},
+            isPublic: false,
+            error: null,
+            text: "",
+            username: ""
+          });
+          console.log("Document successfully written!");
+          console.log(this.state);
+        }
       })
       .catch(error => {
         console.error("Error writing document: ", error);
       });
   }
 
-  componentDidMount() {
-    // console.log(this.props.firebase.activeUser.username);
-    // this.setState({ username: this.props.firebase.activeUser.username });
-  }
   componentDidUpdate() {
     console.log(this.state.username);
+  }
+  componentDidMount() {
+    document.body.classList.remove("home-container");
+    this.mounted = true;
+  }
+  componentWillMount() {
+    this.mounted = false;
   }
   render() {
     const isInvalid = this.state.error != null || this.state.text === "";

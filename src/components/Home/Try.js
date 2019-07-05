@@ -2,12 +2,13 @@ import React, { Component } from "react";
 // import { Link } from "react-router-dom";
 
 import { withFirebase } from "../Firebase";
+import { AuthUserContext } from "../Session";
 // import * as ROUTES from "../../constants/routes";
 import styled from "styled-components";
 import Loader from "react-loader-spinner";
 
 const ImageFromPost = styled.img`
-  width: 15rem;
+  max-width: 15rem;
 `;
 
 class postList extends Component {
@@ -17,94 +18,97 @@ class postList extends Component {
     this.state = {
       loading: false,
       posts: [],
-      posts2: [],
-      limit: 3
+      limit: 5
     };
   }
-  // onListenForMessages = () => {
-  //   this.setState({ loading: true });
 
-  //   this.props.firebase
-  //     .posts()
-  //     .orderByChild("createdAt")
-  //     .limitToLast(this.state.limit)
-  //     .on("value", snapshot => {
-  //       const messageObject = snapshot.val();
-
-  //       if (messageObject) {
-  //         const messageList = Object.keys(messageObject).map(key => ({
-  //           ...messageObject[key],
-  //           uid: key
-  //         }));
-
-  //         this.setState({
-  //           posts2: messageList,
-  //           loading: false
-  //         });
-  //       } else {
-  //         this.setState({ posts2: null, loading: false });
-  //       }
-  //     });
-  // };
-  componentDidMount() {
-    // this.onListenForMessages();
+  onListenForMessages = () => {
     this.setState({ loading: true });
-
     this.unsubscribe = this.props.firebase
       .posts()
       .orderBy("createdAt", "desc")
+      .limit(this.state.limit)
       .onSnapshot(querySnapshot => {
-        var post = [];
-
-        querySnapshot.docs.map(e => {
-          const postsincome = { postID: e.id, postData: e.data() };
-          post.push(postsincome);
-          return post;
-        });
-        this.setState({ posts: post, loading: false });
+        if (querySnapshot.size) {
+          var post = [];
+          querySnapshot.docs.map(e => {
+            const postsincome = { postID: e.id, postData: e.data() };
+            post.push(postsincome);
+            return post;
+          });
+          this.setState({ posts: post, loading: false });
+        } else {
+          this.setState({ posts: null, loading: false });
+        }
       });
+  };
+
+  componentDidMount() {
+    this.onListenForMessages();
+    this.setState({ loading: true });
   }
 
   componentWillUnmount() {
     this.unsubscribe();
   }
 
+  onNextPage = () => {
+    this.setState(
+      state => ({ limit: state.limit + 5 }),
+      this.onListenForMessages
+    );
+  };
+
   render() {
     const { posts, loading } = this.state;
 
     return (
-      <div>
-        <h2>Posts Recientes</h2>
-        {loading && (
+      <AuthUserContext.Consumer>
+        {authorUser => (
           <div>
-            Cargando ...
-            <Loader type="ThreeDots" color="#75b6ff" height="100" width="100" />
+            <h2>Posts Recientes</h2>
+
+            <div>
+              {posts.map(post => (
+                <div key={post.postID}>
+                  <p>
+                    <strong>ID del post:</strong> {post.postID}
+                  </p>
+                  <p>
+                    <strong>ID del autor:</strong> {post.postData.authorID}
+                  </p>
+                  <p>
+                    <strong>{post.postData.username}</strong> publicó el
+                    <i> {post.postData.createdAt.toDate().toString()}</i>
+                  </p>
+                  <p>
+                    <i>{post.postData.text}</i>
+                  </p>
+                  <ImageFromPost src={post.postData.images.imageUrl} />
+                  <p />
+                  <hr />
+                </div>
+              ))}
+            </div>
+            {!loading && posts && (
+              <button type="button" onClick={this.onNextPage}>
+                Más Posts
+              </button>
+            )}
+            {loading && (
+              <div>
+                Cargando ...
+                <Loader
+                  type="ThreeDots"
+                  color="#75b6ff"
+                  height="100"
+                  width="100"
+                />
+              </div>
+            )}
           </div>
         )}
-        <div>
-          {posts.map(post => (
-            <div key={post.postID}>
-              <p>
-                <strong>ID del post:</strong> {post.postID}
-              </p>
-              <p>
-                <strong>ID del autor:</strong> {post.postData.authorID}
-              </p>
-              <p>
-                <strong>{post.postData.username}</strong> publicó el
-                {/* <i> {post.postData.firebaseDate.toDate().toString()}</i> a las */}
-                {/* <i> {post.postData.createdAt.time}</i> hrs: */}
-              </p>
-              <p>
-                <i>{post.postData.text}</i>
-              </p>
-              <ImageFromPost src={post.postData.images.imageUrl} />
-              <p />
-              <hr />
-            </div>
-          ))}
-        </div>
-      </div>
+      </AuthUserContext.Consumer>
     );
   }
 }
