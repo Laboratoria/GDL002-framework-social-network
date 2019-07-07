@@ -1,49 +1,69 @@
 import React, { Component } from "react";
+import PostItem from "./PostItem";
 import { withFirebase } from "../Firebase";
 import { AuthUserContext } from "../Session";
-import styled from "styled-components";
 import Loader from "react-loader-spinner";
 
-const ImageFromPost = styled.img`
-  max-width: 15rem;
-`;
-
-class APostList extends Component {
+class PostsList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       loading: false,
-      posts: [],
+      incomingPosts: [],
       limit: 5
     };
   }
 
   onListenForMessages = () => {
     this.setState({ loading: true });
+
     this.unsubscribe = this.props.firebase
       .posts()
       .orderBy("createdAt", "desc")
       .limit(this.state.limit)
-      .onSnapshot(querySnapshot => {
-        if (querySnapshot.size) {
-          var post = [];
-          querySnapshot.docs.map(e => {
-            const postsincome = { postID: e.id, postData: e.data() };
-            post.push(postsincome);
-            return post;
+      .onSnapshot(snapshot => {
+        if (snapshot.size) {
+          let incomingPosts = [];
+          snapshot.forEach(doc =>
+            incomingPosts.push({ ...doc.data(), uid: doc.id })
+          );
+
+          this.setState({
+            incomingPosts: incomingPosts,
+            loading: false
           });
-          this.setState({ posts: post, loading: false });
         } else {
-          this.setState({ posts: null, loading: false });
+          this.setState({ incomingPosts: null, loading: false });
         }
       });
   };
 
+  /// CON MAP EN LUGAR DE FOREACH
+  // onListenForMessages = () => {
+  //   this.setState({ loading: true });
+
+  //   this.unsubscribe = this.props.firebase
+  //     .posts()
+  //     .orderBy("createdAt", "desc")
+  //     .limit(this.state.limit)
+  //     .onSnapshot(querySnapshot => {
+  //       if (querySnapshot.size) {
+  //         var post = [];
+  //         querySnapshot.docs.map(e => {
+  //           const postsincome = { postID: e.id, postData: e.data() };
+  //           post.push(postsincome);
+  //           return post;
+  //         });
+  //         this.setState({ posts: post, loading: false });
+  //       } else {
+  //         this.setState({ posts: null, loading: false });
+  //       }
+  //     });
+  // };
+
   componentDidMount() {
     this.onListenForMessages();
-
-    // this.setState({ loading: true });
   }
 
   componentWillUnmount() {
@@ -58,7 +78,7 @@ class APostList extends Component {
   };
 
   render() {
-    const { posts, loading } = this.state;
+    const { incomingPosts, loading } = this.state;
 
     return (
       <AuthUserContext.Consumer>
@@ -66,44 +86,25 @@ class APostList extends Component {
           <div>
             <h2>Posts Recientes</h2>
 
-            <div>
-              {posts.map(post => (
-                <div key={post.postID}>
-                  <p>
-                    <strong>ID del post:</strong> {post.postID}
-                  </p>
-                  <p>
-                    <strong>ID del autor:</strong> {post.postData.authorID}
-                  </p>
-                  <p>
-                    <strong>{post.postData.username}</strong> publicó el
-                    <i> {post.postData.createdAt.toDate().toString()}</i>
-                  </p>
-                  <p>
-                    <i>{post.postData.text}</i>
-                  </p>
-                  <ImageFromPost src={post.postData.images.imageUrl} />
-                  <p />
-                  <hr />
-                </div>
-              ))}
-            </div>
-            {!loading && posts && (
-              <button type="button" onClick={this.onNextPage}>
-                Más Posts
-              </button>
-            )}
             {loading && (
               <div>
-                Cargando ...
-                <Loader
-                  type="ThreeDots"
-                  color="#75b6ff"
-                  height="100"
-                  width="100"
-                />
+                <Loader type="CradleLoader" />
               </div>
             )}
+
+            {!loading && incomingPosts && (
+              <div>
+                <PostItem
+                  incomingPosts={this.state.incomingPosts}
+                  authorUser={authorUser}
+                />
+                <button type="button" onClick={this.onNextPage}>
+                  Más Posts
+                </button>
+              </div>
+            )}
+
+            {!incomingPosts && <div>No hay posts! aún...</div>}
           </div>
         )}
       </AuthUserContext.Consumer>
@@ -111,4 +112,4 @@ class APostList extends Component {
   }
 }
 
-export default withFirebase(APostList);
+export default withFirebase(PostsList);

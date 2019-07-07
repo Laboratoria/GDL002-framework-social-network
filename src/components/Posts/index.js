@@ -1,4 +1,3 @@
-import CreatePost from "./CreatePost";
-import APostList from "./PostsList";
+import Posts from "./Posts";
 
-export { CreatePost, APostList };
+export default Posts;

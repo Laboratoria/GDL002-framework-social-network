@@ -15,6 +15,8 @@ const firebaseConfig = {
 class Firebase {
   constructor() {
     app.initializeApp(firebaseConfig);
+
+    // HELPER
     this.fieldValue = app.firestore.FieldValue;
     // FIREBASE API'S
     this.auth = app.auth(); // *** Instantiate Firebase AUTH ***
