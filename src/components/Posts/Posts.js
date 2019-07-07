@@ -15,8 +15,8 @@ class PostsBase extends Component {
       images: {},
       isPublic: false,
       error: null,
-      text: "",
-      username: ""
+      text: ""
+      // username: ""
     };
     this.handleImageChange = this.handleImageChange.bind(this);
     this.createPost = this.createPost.bind(this);
@@ -25,7 +25,7 @@ class PostsBase extends Component {
   onChangeText = event => {
     this.setState({
       text: event.target.value,
-      username: this.props.firebase.activeUser.username,
+      // username: this.props.firebase.activeUser.username,
       authorID: this.props.firebase.activeUser.uid
     });
     // console.log(this.state.text);
@@ -76,6 +76,7 @@ class PostsBase extends Component {
     this.props.firebase
       .posts()
       .add({
+        username: this.props.firebase.activeUser.username,
         createdAt: this.props.firebase.fieldValue.serverTimestamp(),
         ...this.state
       })
@@ -86,8 +87,8 @@ class PostsBase extends Component {
           images: {},
           isPublic: false,
           error: null,
-          text: "",
-          username: ""
+          text: ""
+          // username: ""
         });
         console.log("Document successfully written!");
         console.log(this.state);

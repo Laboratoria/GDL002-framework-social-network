@@ -15,7 +15,7 @@ class PostsList extends Component {
     };
   }
 
-  onListenForMessages = () => {
+  onListenForPosts = () => {
     this.setState({ loading: true });
 
     this.unsubscribe = this.props.firebase
@@ -40,7 +40,7 @@ class PostsList extends Component {
   };
 
   /// CON MAP EN LUGAR DE FOREACH
-  // onListenForMessages = () => {
+  // onListenForPosts = () => {
   //   this.setState({ loading: true });
 
   //   this.unsubscribe = this.props.firebase
@@ -63,7 +63,7 @@ class PostsList extends Component {
   // };
 
   componentDidMount() {
-    this.onListenForMessages();
+    this.onListenForPosts();
   }
 
   componentWillUnmount() {
@@ -71,10 +71,7 @@ class PostsList extends Component {
   }
 
   onNextPage = () => {
-    this.setState(
-      state => ({ limit: state.limit + 5 }),
-      this.onListenForMessages
-    );
+    this.setState(state => ({ limit: state.limit + 5 }), this.onListenForPosts);
   };
 
   render() {
