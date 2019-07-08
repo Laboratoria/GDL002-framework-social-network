@@ -15,7 +15,10 @@ class PostsBase extends Component {
       images: {},
       isPublic: false,
       error: null,
-      text: ""
+      text: "",
+      loading: false,
+      incomingPosts: [],
+      limit: 5
       // username: ""
     };
     this.handleImageChange = this.handleImageChange.bind(this);
@@ -73,12 +76,17 @@ class PostsBase extends Component {
   }
 
   createPost() {
+    this.setState({ loading: true });
     this.props.firebase
       .posts()
       .add({
         username: this.props.firebase.activeUser.username,
-        createdAt: this.props.firebase.fieldValue.serverTimestamp(),
-        ...this.state
+        // createdAt: this.props.firebase.fieldValue.serverTimestamp(),
+        createdAt: new Date(),
+        authorID: this.state.authorID,
+        images: this.state.images,
+        isPublic: this.state.isPublic,
+        text: this.state.text
       })
       .then(() => {
         console.log(this.state);
@@ -87,9 +95,11 @@ class PostsBase extends Component {
           images: {},
           isPublic: false,
           error: null,
-          text: ""
+          text: "",
+          loading: false
           // username: ""
         });
+
         console.log("Document successfully written!");
         console.log(this.state);
       })
@@ -97,6 +107,65 @@ class PostsBase extends Component {
         console.error("Error writing document: ", error);
       });
   }
+
+  onListenForPosts = () => {
+    this.setState({ loading: true });
+
+    this.unsubscribe = this.props.firebase
+      .posts()
+      .orderBy("createdAt", "desc")
+      .limit(this.state.limit)
+      .onSnapshot(snapshot => {
+        if (snapshot.size) {
+          let incomingPosts = [];
+          snapshot.forEach(doc =>
+            incomingPosts.push({ ...doc.data(), uid: doc.id })
+          );
+          this.setState({
+            incomingPosts: incomingPosts,
+            loading: false
+          });
+        } else {
+          this.setState({ incomingPosts: null, loading: false });
+        }
+      });
+  };
+
+  /// CON MAP EN LUGAR DE FOREACH
+  // onListenForPosts = () => {
+  //   this.setState({ loading: true });
+
+  //   this.unsubscribe = this.props.firebase
+  //     .posts()
+  //     .orderBy("createdAt", "desc")
+  //     .limit(this.state.limit)
+  //     .onSnapshot(querySnapshot => {
+  //       if (querySnapshot.size) {
+  //         var post = [];
+  //         querySnapshot.docs.map(e => {
+  //           const postsincome = { postID: e.id, postData: e.data() };
+  //           post.push(postsincome);
+  //           return post;
+  //         });
+  //         this.setState({ posts: post, loading: false });
+  //       } else {
+  //         this.setState({ posts: null, loading: false });
+  //       }
+  //     });
+  // };
+
+  componentDidMount() {
+    this.onListenForPosts();
+    console.log(this.props.firebase.activeUser.uid);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  onNextPage = () => {
+    this.setState(state => ({ limit: state.limit + 5 }), this.onListenForPosts);
+  };
 
   render() {
     const isInvalid = this.state.error != null || this.state.text === "";
@@ -108,7 +177,11 @@ class PostsBase extends Component {
           <label> {this.props.firebase.activeUser.username}</label>
         </h2>
         <h3>Comparte tu último descubrimiento:</h3>
-        <input type="text" onChange={this.onChangeText} />
+        <input
+          type="text"
+          value={this.state.text}
+          onChange={this.onChangeText}
+        />
         <label>
           Post privado (visible sólo en mi club):
           <input
@@ -134,7 +207,12 @@ class PostsBase extends Component {
         >
           Publicar
         </button>
-        <PostsList />
+        <PostsList
+          limit={this.state.limit}
+          loading={this.state.loading}
+          incomingPosts={this.state.incomingPosts}
+          onNextPage={this.state.onNextPage}
+        />
       </div>
     );
   }
