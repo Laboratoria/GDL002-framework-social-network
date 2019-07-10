@@ -1,25 +1,31 @@
 import React, { Component } from "react";
-import UploadImage from "./UploadImage";
+import { UploadImage } from "./UploadImage";
 import { withFirebase } from "../Firebase";
 import PostsList from "./PostsList";
-// import { getMoment } from "../Utils";
+// import TextArea from "./TextArea";
 // import { AuthUserContext } from "../Session";
-// import styled from "styled-components";
+import styled from "styled-components";
 //
 
+const TextArea = styled.textarea`
+  width: 50%;
+  resize: none;
+  overflow: auto;
+`;
+
+const INITIAL_STATE = {
+  authorID: "",
+  bookIt: 0,
+  error: null,
+  images: {},
+  isPublic: false,
+  text: ""
+};
 class PostsBase extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      authorID: "",
-      images: {},
-      isPublic: false,
-      error: null,
-      text: "",
-      loading: false,
-      incomingPosts: [],
-      limit: 5
-      // username: ""
+      ...INITIAL_STATE
     };
     this.handleImageChange = this.handleImageChange.bind(this);
     this.createPost = this.createPost.bind(this);
@@ -28,7 +34,6 @@ class PostsBase extends Component {
   onChangeText = event => {
     this.setState({
       text: event.target.value,
-      // username: this.props.firebase.activeUser.username,
       authorID: this.props.firebase.activeUser.uid
     });
     // console.log(this.state.text);
@@ -48,7 +53,7 @@ class PostsBase extends Component {
         .split(".")
         .pop()
         .toLowerCase();
-      const isImage = fileTypes.indexOf(extension) > -1; //&& file.size < 5000
+      const isImage = fileTypes.indexOf(extension) > -1;
 
       const size = file.size < 1048487;
       if (!isImage) {
@@ -76,30 +81,16 @@ class PostsBase extends Component {
   }
 
   createPost() {
-    this.setState({ loading: true });
     this.props.firebase
       .posts()
       .add({
         username: this.props.firebase.activeUser.username,
-        // createdAt: this.props.firebase.fieldValue.serverTimestamp(),
         createdAt: new Date(),
-        authorID: this.state.authorID,
-        images: this.state.images,
-        isPublic: this.state.isPublic,
-        text: this.state.text
+        ...this.state
       })
       .then(() => {
         console.log(this.state);
-        this.setState({
-          authorID: "",
-          images: {},
-          isPublic: false,
-          error: null,
-          text: "",
-          loading: false
-          // username: ""
-        });
-
+        this.setState({ ...INITIAL_STATE });
         console.log("Document successfully written!");
         console.log(this.state);
       })
@@ -107,65 +98,6 @@ class PostsBase extends Component {
         console.error("Error writing document: ", error);
       });
   }
-
-  onListenForPosts = () => {
-    this.setState({ loading: true });
-
-    this.unsubscribe = this.props.firebase
-      .posts()
-      .orderBy("createdAt", "desc")
-      .limit(this.state.limit)
-      .onSnapshot(snapshot => {
-        if (snapshot.size) {
-          let incomingPosts = [];
-          snapshot.forEach(doc =>
-            incomingPosts.push({ ...doc.data(), uid: doc.id })
-          );
-          this.setState({
-            incomingPosts: incomingPosts,
-            loading: false
-          });
-        } else {
-          this.setState({ incomingPosts: null, loading: false });
-        }
-      });
-  };
-
-  /// CON MAP EN LUGAR DE FOREACH
-  // onListenForPosts = () => {
-  //   this.setState({ loading: true });
-
-  //   this.unsubscribe = this.props.firebase
-  //     .posts()
-  //     .orderBy("createdAt", "desc")
-  //     .limit(this.state.limit)
-  //     .onSnapshot(querySnapshot => {
-  //       if (querySnapshot.size) {
-  //         var post = [];
-  //         querySnapshot.docs.map(e => {
-  //           const postsincome = { postID: e.id, postData: e.data() };
-  //           post.push(postsincome);
-  //           return post;
-  //         });
-  //         this.setState({ posts: post, loading: false });
-  //       } else {
-  //         this.setState({ posts: null, loading: false });
-  //       }
-  //     });
-  // };
-
-  componentDidMount() {
-    this.onListenForPosts();
-    console.log(this.props.firebase.activeUser.uid);
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  onNextPage = () => {
-    this.setState(state => ({ limit: state.limit + 5 }), this.onListenForPosts);
-  };
 
   render() {
     const isInvalid = this.state.error != null || this.state.text === "";
@@ -177,10 +109,10 @@ class PostsBase extends Component {
           <label> {this.props.firebase.activeUser.username}</label>
         </h2>
         <h3>Comparte tu último descubrimiento:</h3>
-        <input
+        <TextArea
           type="text"
-          value={this.state.text}
           onChange={this.onChangeText}
+          value={this.state.text}
         />
         <label>
           Post privado (visible sólo en mi club):
@@ -193,7 +125,8 @@ class PostsBase extends Component {
           />
         </label>
         <UploadImage
-          handleImageChange={this.handleImageChange}
+          buttonLabel={"Subir Imagen"}
+          handleImage={this.handleImageChange}
           imageUrl={this.state.images.imageUrl}
           error={this.state.error}
         />
@@ -207,12 +140,14 @@ class PostsBase extends Component {
         >
           Publicar
         </button>
-        <PostsList
-          limit={this.state.limit}
-          loading={this.state.loading}
-          incomingPosts={this.state.incomingPosts}
-          onNextPage={this.state.onNextPage}
-        />
+        <button
+          onClick={() => {
+            this.setState({ ...INITIAL_STATE });
+          }}
+        >
+          Cancelar
+        </button>
+        <PostsList />
       </div>
     );
   }
