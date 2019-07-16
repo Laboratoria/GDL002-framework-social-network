@@ -40,20 +40,20 @@
 }
 
 .bckg-post{
-    background-image: url(https://cdn.dribbble.com/users/12015/screenshots/981299/kiki.jpg);
+    background-image: url('../images/kiki.jpg');
     background-size: 40rem;
     background-position: center;
     background-repeat: no-repeat; 
 }
 
 .bckg-find{
-    background-image: url(https://cdn.dribbble.com/users/458522/screenshots/2301613/dribbbler_800x600px.jpg);
+    background-image: url('../images/castillo.jpg');
     background-attachment: fixed;
     background-size: cover;
 }
 
 .bckg-profile{
-    background-image: url(https://cdn.dribbble.com/users/140903/screenshots/3068362/ghibli.jpg);
+    background-image: url('../images/ghibli.jpg');
     background-attachment: fixed;
     background-size: cover;
 }
