@@ -1,0 +1,63 @@
+.bckg-home{
+    background-image: url('../images/totoro_dribbble.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+}
+.bckg-home2{
+    background-image: url(../images/sleep.gif);
+    /* background-attachment: fixed; */
+    background-repeat: no-repeat;
+    background-size: 20rem;
+    background-position: right;
+    
+}
+
+.bckg-signin{
+    background-image: url('../images/mononoke_dribbble.jpg');
+    background-size: 28rem; 
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.bckg-signup{
+    background-image: url('../images/totoro.png');
+    background-size: 32rem; 
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.bckg-forgot{
+    background-image: url('../images/calcifer.jpg');
+     background-size: 25rem;
+     background-repeat: no-repeat;
+     background-position: right;
+} 
+
+.bckg-user{
+    background-image: url('../images/ghibli_dribbble.png');
+    background-attachment: fixed;
+    background-size: contain;
+}
+
+.bckg-post{
+    background-image: url(https://cdn.dribbble.com/users/12015/screenshots/981299/kiki.jpg);
+    background-size: 40rem;
+    background-position: center;
+    background-repeat: no-repeat; 
+}
+
+.bckg-find{
+    background-image: url(https://cdn.dribbble.com/users/458522/screenshots/2301613/dribbbler_800x600px.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.bckg-profile{
+    background-image: url(https://cdn.dribbble.com/users/140903/screenshots/3068362/ghibli.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.bckg-cover{
+    background: rgba(255, 255, 255, 0.9);
+}
