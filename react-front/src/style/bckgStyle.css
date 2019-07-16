@@ -5,11 +5,9 @@
 }
 .bckg-home2{
     background-image: url(../images/sleep.gif);
-    /* background-attachment: fixed; */
     background-repeat: no-repeat;
     background-size: 20rem;
     background-position: right;
-    
 }
 
 .bckg-signin{

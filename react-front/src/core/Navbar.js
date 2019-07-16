@@ -11,6 +11,7 @@ const isActive = (history, path) => {
 
 const Navbar = ({ history }) => (
   <div>
+  
     <ul className="nav nav-tabs bg-primary">
       <li className="nav-item">
         <Link className="nav-link" 
@@ -89,9 +90,8 @@ const Navbar = ({ history }) => (
 
         </>
       )}
-
-    </ul>
-  </div>
+        </ul>
+      </div> 
 );
 
 export default withRouter(Navbar);

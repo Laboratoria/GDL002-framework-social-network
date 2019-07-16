@@ -104,15 +104,16 @@ class SinglePost extends Component {
               className="fas fa-thumbs-up text-success bg-dark"
               style={{ padding: "10px", borderRadius: "50%" }}
             />{" "}
-            {likes} Like
+            {likes} 
           </h3>
         ) : (
-          <h3 onClick={this.likeToggle}>
+          <h3 >
             <i
               className="fas fa-thumbs-up text-warning bg-dark"
               style={{ padding: "10px", borderRadius: "50%" }}
+              onClick={this.likeToggle}
             />{" "}
-            {likes} Like
+            {likes} 
           </h3>
         )}
 

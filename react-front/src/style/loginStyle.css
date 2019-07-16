@@ -4,7 +4,7 @@ html {
     padding: 0;
     height: 100%;
     background: white !important;
-    cursor: url(../images/totoro.cur) 7 14, auto;
+    /* cursor: url(../images/totoro.cur) 7 14, auto; */
 }
 
 .user_card {
@@ -84,3 +84,4 @@ html {
     position: relative;
     left: 5px;
    }
+
