@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://imagui-123.github.io/GDL002-framework-social-network/",
-  
   "dependencies": {
     "gh-pages": "^2.0.1",
     "mdbreact": "^4.18.0",
