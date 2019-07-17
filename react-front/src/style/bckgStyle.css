@@ -59,3 +59,13 @@
 .bckg-cover{
     background: rgba(255, 255, 255, 0.9);
 }
+
+
+@media (max-width: 800px) {
+    .bckg-signin{
+    background-image: url('../images/mononoke_dribbble.jpg');
+    background-size: 18rem; 
+    background-position: right;
+    background-repeat: no-repeat;
+    }
+   }
