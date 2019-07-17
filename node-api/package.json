@@ -4,11 +4,7 @@
   "description": "Social Network ",
   "main": "app.js",
   "scripts": {
-    "react-front-install": "npm install --prefix react-front",
-    "start": "node app.js",
-    "app": "nodemon app.js",
-    "react-front": "npm start --prefix react-front",
-    "dev": "concurrently \"npm run app\" \"npm run react-front\""
+    "dev": "nodemon app.js"
   },
   "keywords": [
     "node",
